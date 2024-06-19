@@ -1,1 +1,52 @@
-<h1 class="text-3xl font-bold underline">123</h1>
+<div class="bg-light flex min-h-screen flex-col">
+  <h1 class="mx-auto text-center text-3xl font-bold text-slate-600">
+    E-Parking 充電車位
+  </h1>
+  <div class="mr-6 sm:ml-48">
+    <div class="mb-2 mt-4 flex justify-center">
+      <input
+        type="text"
+        placeholder="搜尋地址關鍵字"
+        class="h-10 rounded-md border-gray-400 placeholder:italic"
+      />
+      <button
+        type="button"
+        class="ml-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
+      >
+        搜尋
+      </button>
+    </div>
+    <div
+      class="rounded-lg border-2 border-solid border-gray-200 p-4 dark:border-gray-700"
+    ></div>
+  </div>
+  <nav
+    class="relative mt-auto flex bg-gray-500 sm:absolute sm:h-screen sm:w-44 sm:flex-col"
+  >
+    <app-nav-item
+      class="w-full sm:mb-2"
+      [itemName]="'地圖'"
+      [iconClass]="'fa-solid fa-lg fa-user fa-location-dot'"
+    ></app-nav-item>
+    <app-nav-item
+      class="w-full sm:mb-2"
+      [itemName]="'設定'"
+      [iconClass]="'fa-solid fa-lg fa-user fa-gear'"
+    ></app-nav-item>
+    <app-nav-item
+      class="w-full sm:mb-2"
+      [itemName]="'收藏'"
+      [iconClass]="'fa-regular fa-lg fa-bookmark'"
+    ></app-nav-item>
+    <app-nav-item
+      class="w-full"
+      [itemName]="'關於我'"
+      [iconClass]="'fa-regular fa-lg fa-user fa-user'"
+    ></app-nav-item>
+    <p
+      class="sm:px-auto hidden text-sm text-white sm:mb-4 sm:mt-auto sm:block sm:pl-1"
+    >
+      © 2024. All rights reserved.
+    </p>
+  </nav>
+</div>
