@@ -1,8 +1,10 @@
-<div class="bg-light flex min-h-screen flex-col">
-  <h1 class="mx-auto text-center text-3xl font-bold text-slate-600">
+<div class="flex min-h-screen flex-col bg-light">
+  <h1
+    class="mx-auto mb-4 mt-2 text-center text-3xl font-bold text-slate-600 sm:ml-56"
+  >
     E-Parking 充電車位
   </h1>
-  <div class="mr-6 sm:ml-48">
+  <div class="ml-6 mr-6 sm:ml-[220px]">
     <div class="mb-2 mt-4 flex justify-center">
       <input
         type="text"
@@ -17,11 +19,16 @@
       </button>
     </div>
     <div
-      class="rounded-lg border-2 border-solid border-gray-200 p-4 dark:border-gray-700"
-    ></div>
+      class="h-[500px] w-full rounded-lg border-2 border-solid border-gray-200 p-4 dark:border-gray-700"
+    >
+      <google-map [options]="options" height="100%" width="100%" #map>
+        <map-marker [position]="markerPositions"></map-marker>
+        <map-info-window>Info Window content</map-info-window>
+      </google-map>
+    </div>
   </div>
   <nav
-    class="relative mt-auto flex bg-gray-500 sm:absolute sm:h-screen sm:w-44 sm:flex-col"
+    class="relative mt-auto flex bg-gray-500 sm:absolute sm:h-screen sm:w-52 sm:flex-col"
   >
     <app-nav-item
       class="w-full sm:mb-2"
@@ -43,9 +50,7 @@
       [itemName]="'關於我'"
       [iconClass]="'fa-regular fa-lg fa-user fa-user'"
     ></app-nav-item>
-    <p
-      class="sm:px-auto hidden text-sm text-white sm:mb-4 sm:mt-auto sm:block sm:pl-1"
-    >
+    <p class="hidden text-sm text-white sm:mb-4 sm:mt-auto sm:block sm:p-4">
       © 2024. All rights reserved.
     </p>
   </nav>
