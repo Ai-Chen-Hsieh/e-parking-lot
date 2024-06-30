@@ -2,7 +2,7 @@
   <h1
     class="mx-auto mb-4 mt-2 text-center text-3xl font-bold text-slate-600 sm:ml-56"
   >
-    E-Parking 充電車位
+    Parking 台北市停車場資訊
   </h1>
   <div class="ml-6 mr-6 flex flex-col sm:ml-[220px]">
     <div class="mb-2 mt-4 flex justify-center">
@@ -43,9 +43,12 @@
 
         <!-- 詳細資訊info window -->
         <map-info-window>
-          <div class="border-b-1 mb-2 flex border-solid border-[#9b9b9b] p-1">
+          <div class="border-b-1 mb-2 flex border-solid border-[#9b9b9b] p-2">
             <h2 class="mr-auto">{{ currentInfoWindow.name }}</h2>
-            <button (click)="addToFavorite(currentInfoWindow.id)">
+            <button
+              (click)="addToFavorite(currentInfoWindow.id)"
+              class="border-1 rounded-md border-solid border-slate-400 p-2 hover:cursor-pointer"
+            >
               <span class="mr-2">加入收藏</span>
               <i
                 class="fa-solid fa-heart text-red-600 hover:cursor-pointer"
