@@ -18,12 +18,27 @@
         搜尋
       </button>
     </div>
+    <p>資料擷取時間:2023-09-28 16:04:21</p>
+    <p>資訊來源:台北市政府停車資訊</p>
     <div
       class="h-[500px] w-full rounded-lg border-2 border-solid border-gray-200 p-4 dark:border-gray-700"
     >
       <google-map [options]="options" height="100%" width="100%" #map>
-        <map-marker [position]="markerPositions"></map-marker>
-        <map-info-window>Info Window content</map-info-window>
+        <map-marker [position]="selfMarkerPositions"></map-marker>
+        <map-marker
+          *ngFor="let item of allStation"
+          [position]="item.location"
+          #marker="mapMarker"
+          (mapClick)="openInfoWindow(marker, item)"
+        ></map-marker>
+        <map-info-window>
+          <h2 class="text-xl">{{ currentInfoWindow.name }}</h2>
+          <ul>
+            <li>【總車位數量】:{{ currentInfoWindow.totalcar }}</li>
+            <li>【充電車位數量】:{{ currentInfoWindow.ChargingStation }}</li>
+            <li>【收費資訊】:{{ currentInfoWindow.payex }}</li>
+          </ul>
+        </map-info-window>
       </google-map>
     </div>
   </div>
