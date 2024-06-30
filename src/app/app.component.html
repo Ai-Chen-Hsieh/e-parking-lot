@@ -24,19 +24,26 @@
       class="h-[500px] w-full rounded-lg border-2 border-solid border-gray-200 p-4 dark:border-gray-700"
     >
       <google-map [options]="options" height="100%" width="100%" #map>
-        <map-marker [position]="selfMarkerPositions"></map-marker>
+        <map-marker
+          [position]="selfMarkerPositions"
+          [options]="selfMarkerOptions"
+        ></map-marker>
         <map-marker
           *ngFor="let item of allStation"
           [position]="item.location"
+          [options]="markerOptions"
           #marker="mapMarker"
           (mapClick)="openInfoWindow(marker, item)"
         ></map-marker>
         <map-info-window>
-          <h2 class="text-xl">{{ currentInfoWindow.name }}</h2>
+          <h2 class="mb-2 text-2xl font-bold">{{ currentInfoWindow.name }}</h2>
           <ul>
             <li>【總車位數量】:{{ currentInfoWindow.totalcar }}</li>
             <li>【充電車位數量】:{{ currentInfoWindow.ChargingStation }}</li>
-            <li>【收費資訊】:{{ currentInfoWindow.payex }}</li>
+            <li>
+              <span>【收費資訊】:</span>
+              <p>{{ currentInfoWindow.payex }}</p>
+            </li>
           </ul>
         </map-info-window>
       </google-map>
