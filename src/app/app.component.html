@@ -4,7 +4,7 @@
   >
     E-Parking 充電車位
   </h1>
-  <div class="ml-6 mr-6 sm:ml-[220px]">
+  <div class="ml-6 mr-6 flex flex-col sm:ml-[220px]">
     <div class="mb-2 mt-4 flex justify-center">
       <input
         type="text"
@@ -18,16 +18,19 @@
         搜尋
       </button>
     </div>
-    <p>資料擷取時間:2023-09-28 16:04:21</p>
-    <p>資訊來源:台北市政府停車資訊</p>
+    <i class="font-bold"
+      >*資料擷取時間:2023-09-28 16:04:21 (可能與真實資料有出入僅供參考)</i
+    >
     <div
       class="h-[500px] w-full rounded-lg border-2 border-solid border-gray-200 p-4 dark:border-gray-700"
     >
       <google-map [options]="options" height="100%" width="100%" #map>
+        <!-- 目前位置 -->
         <map-marker
           [position]="selfMarkerPositions"
           [options]="selfMarkerOptions"
         ></map-marker>
+        <!-- cluster marker 停車位置-->
         <map-marker-clusterer [imagePath]="markerClustererImagePath">
           <map-marker
             *ngFor="let item of allStation"
@@ -38,8 +41,9 @@
           ></map-marker>
         </map-marker-clusterer>
 
+        <!-- 詳細資訊info window -->
         <map-info-window>
-          <h2 class="mb-2 text-2xl font-bold">{{ currentInfoWindow.name }}</h2>
+          <h2>{{ currentInfoWindow.name }}</h2>
           <ul>
             <li>【總車位數量】:{{ currentInfoWindow.totalcar }}</li>
             <li>【充電車位數量】:{{ currentInfoWindow.ChargingStation }}</li>
@@ -51,6 +55,12 @@
         </map-info-window>
       </google-map>
     </div>
+    <a
+      href="https://pma.gov.taipei/Default.aspx"
+      target="_blank"
+      class="mt-1 self-end"
+      >資訊來源:台北市政府停車資訊</a
+    >
   </div>
   <nav
     class="relative mt-auto flex bg-gray-500 sm:absolute sm:h-screen sm:w-52 sm:flex-col"
