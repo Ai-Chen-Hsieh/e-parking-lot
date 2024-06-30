@@ -28,13 +28,16 @@
           [position]="selfMarkerPositions"
           [options]="selfMarkerOptions"
         ></map-marker>
-        <map-marker
-          *ngFor="let item of allStation"
-          [position]="item.location"
-          [options]="markerOptions"
-          #marker="mapMarker"
-          (mapClick)="openInfoWindow(marker, item)"
-        ></map-marker>
+        <map-marker-clusterer [imagePath]="markerClustererImagePath">
+          <map-marker
+            *ngFor="let item of allStation"
+            [position]="item.location"
+            [options]="markerOptions"
+            #marker="mapMarker"
+            (mapClick)="openInfoWindow(marker, item)"
+          ></map-marker>
+        </map-marker-clusterer>
+
         <map-info-window>
           <h2 class="mb-2 text-2xl font-bold">{{ currentInfoWindow.name }}</h2>
           <ul>

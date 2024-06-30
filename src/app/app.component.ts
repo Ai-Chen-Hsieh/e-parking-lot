@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
     icon: {
       path: google.maps.SymbolPath.CIRCLE,
       scale: 20,
-      fillColor: 'blue',
+      fillColor: '#14ba54',
       fillOpacity: 1,
       strokeWeight: 0,
       rotation: 0,
@@ -45,6 +45,9 @@ export class AppComponent implements OnInit {
   markerOptions: google.maps.MarkerOptions = {
     label: '1',
   };
+
+  markerClustererImagePath =
+    'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m';
 
   // 訊息視窗
   @ViewChild(MapInfoWindow) infoWindow: MapInfoWindow | undefined;
