@@ -6,6 +6,9 @@ module.exports = {
       backgroundColor: {
         light: "#f8f9fa",
       },
+      borderWidth: {
+        1: "1px",
+      },
     },
     fontFamily: {
       sans: ["Graphik", "sans-serif"],

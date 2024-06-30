@@ -46,6 +46,7 @@ export class AppComponent implements OnInit {
     label: '1',
   };
 
+  // cluster
   markerClustererImagePath =
     'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m';
 
@@ -65,13 +66,18 @@ export class AppComponent implements OnInit {
       lat: 0,
       lng: 0,
     },
+    isFavorite: false,
   };
 
   allStation: ParkingStationInfo[] = [];
+  favoriteList: string[] = [];
   service = inject(Service);
 
   ngOnInit(): void {
     initFlowbite();
+    this.favoriteList = JSON.parse(localStorage.getItem('favorite') || '[]')
+      ? JSON.parse(localStorage.getItem('favorite') || '[]')
+      : [];
     this.getUserPosition();
     this.getStation();
   }
@@ -101,6 +107,12 @@ export class AppComponent implements OnInit {
           }) => i.EntranceCoord.EntrancecoordInfo !== undefined,
         )
         .map((item: ParkingLot): ParkingStationInfo => {
+          let isFavorite = this.favoriteList.find(
+            (i) => item.id === i.toString(),
+          )
+            ? true
+            : false;
+
           return {
             id: item.id,
             name: item.name,
@@ -115,6 +127,7 @@ export class AppComponent implements OnInit {
               lat: Number(item.EntranceCoord.EntrancecoordInfo[0]?.Xcod),
               lng: Number(item.EntranceCoord.EntrancecoordInfo[0]?.Ycod),
             },
+            isFavorite: isFavorite,
           };
         });
       this.allStation = [...allStationPosition];
@@ -125,7 +138,23 @@ export class AppComponent implements OnInit {
     this.currentInfoWindow = {
       ...item,
     };
-    console.log('current', this.currentInfoWindow);
     this.infoWindow!.open(marker);
+    console.log('current', this.currentInfoWindow);
+  }
+
+  addToFavorite(id: string) {
+    const isFavorite = this.favoriteList.includes(id);
+
+    if (isFavorite) {
+      this.favoriteList = this.favoriteList.filter((favId) => favId !== id);
+    } else {
+      this.favoriteList.push(id);
+    }
+
+    localStorage.setItem('favorite', JSON.stringify(this.favoriteList));
+    this.allStation = this.allStation.map((station) => ({
+      ...station,
+      isFavorite: station.id === id ? !station.isFavorite : station.isFavorite,
+    }));
   }
 }

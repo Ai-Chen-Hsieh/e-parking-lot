@@ -43,7 +43,20 @@
 
         <!-- 詳細資訊info window -->
         <map-info-window>
-          <h2>{{ currentInfoWindow.name }}</h2>
+          <div class="border-b-1 mb-2 flex border-solid border-[#9b9b9b] p-1">
+            <h2 class="mr-auto">{{ currentInfoWindow.name }}</h2>
+            <button (click)="addToFavorite(currentInfoWindow.id)">
+              <span class="mr-2">加入收藏</span>
+              <i
+                class="fa-solid fa-heart text-red-600 hover:cursor-pointer"
+                *ngIf="currentInfoWindow.isFavorite"
+              ></i>
+              <i
+                class="fa-regular fa-heart text-red-600 hover:cursor-pointer"
+                *ngIf="!currentInfoWindow.isFavorite"
+              ></i>
+            </button>
+          </div>
           <ul>
             <li>【總車位數量】:{{ currentInfoWindow.totalcar }}</li>
             <li>【充電車位數量】:{{ currentInfoWindow.ChargingStation }}</li>
@@ -72,13 +85,13 @@
     ></app-nav-item>
     <app-nav-item
       class="w-full sm:mb-2"
-      [itemName]="'設定'"
-      [iconClass]="'fa-solid fa-lg fa-user fa-gear'"
+      [itemName]="'收藏'"
+      [iconClass]="'fa-regular fa-lg fa-bookmark'"
     ></app-nav-item>
     <app-nav-item
       class="w-full sm:mb-2"
-      [itemName]="'收藏'"
-      [iconClass]="'fa-regular fa-lg fa-bookmark'"
+      [itemName]="'設定'"
+      [iconClass]="'fa-solid fa-lg fa-user fa-gear'"
     ></app-nav-item>
     <app-nav-item
       class="w-full"

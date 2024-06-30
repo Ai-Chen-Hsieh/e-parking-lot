@@ -64,4 +64,5 @@ export interface ParkingStationInfo {
   totalmotor: number;
   ChargingStation: string;
   location: Location;
+  isFavorite: boolean;
 }
