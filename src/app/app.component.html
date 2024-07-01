@@ -32,15 +32,27 @@
         ></map-marker>
         <!-- cluster marker 停車位置-->
         <map-marker-clusterer [imagePath]="markerClustererImagePath">
-          <map-marker
-            *ngFor="let item of allStation"
-            [position]="item.location"
-            [options]="markerOptions"
-            #marker="mapMarker"
-            (mapClick)="openInfoWindow(marker, item)"
-          ></map-marker>
+          <!-- show all station -->
+          <ng-container *ngIf="showAllStation">
+            <map-marker
+              *ngFor="let item of allStation"
+              [position]="item.location"
+              [options]="markerOptions"
+              #marker="mapMarker"
+              (mapClick)="openInfoWindow(marker, item)"
+            ></map-marker>
+          </ng-container>
+          <!-- show favorite station -->
+          <ng-container *ngIf="!showAllStation">
+            <map-marker
+              *ngFor="let item of favoriteStation"
+              [position]="item.location"
+              [options]="favoriteMarkerOption"
+              #marker="mapMarker"
+              (mapClick)="openInfoWindow(marker, item)"
+            ></map-marker>
+          </ng-container>
         </map-marker-clusterer>
-
         <!-- 詳細資訊info window -->
         <map-info-window>
           <div class="border-b-1 mb-2 flex border-solid border-[#9b9b9b] p-2">
@@ -85,11 +97,13 @@
       class="w-full sm:mb-2"
       [itemName]="'地圖'"
       [iconClass]="'fa-solid fa-lg fa-user fa-location-dot'"
+      (click)="showAll()"
     ></app-nav-item>
     <app-nav-item
       class="w-full sm:mb-2"
       [itemName]="'收藏'"
       [iconClass]="'fa-regular fa-lg fa-bookmark'"
+      (click)="showFavorite()"
     ></app-nav-item>
     <app-nav-item
       class="w-full sm:mb-2"

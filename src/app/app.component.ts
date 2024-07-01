@@ -46,6 +46,10 @@ export class AppComponent implements OnInit {
     label: '1',
   };
 
+  favoriteMarkerOption: google.maps.MarkerOptions = {
+    icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+  };
+
   // cluster
   markerClustererImagePath =
     'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m';
@@ -70,8 +74,10 @@ export class AppComponent implements OnInit {
   };
 
   allStation: ParkingStationInfo[] = [];
+  favoriteStation: ParkingStationInfo[] = [];
   favoriteList: string[] = [];
   service = inject(Service);
+  showAllStation = true;
 
   ngOnInit(): void {
     initFlowbite();
@@ -139,7 +145,6 @@ export class AppComponent implements OnInit {
       ...item,
     };
     this.infoWindow!.open(marker);
-    console.log('current', this.currentInfoWindow);
   }
 
   addToFavorite(id: string) {
@@ -156,5 +161,14 @@ export class AppComponent implements OnInit {
       ...station,
       isFavorite: station.id === id ? !station.isFavorite : station.isFavorite,
     }));
+    this.favoriteStation = this.allStation.filter((i) => i.isFavorite);
+  }
+
+  showFavorite() {
+    this.showAllStation = false;
+  }
+
+  showAll() {
+    this.showAllStation = true;
   }
 }
