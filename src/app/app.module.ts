@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { NavItemComponent } from './components/nav-item/nav-item.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { FormsModule } from '@angular/forms';
+import { HomeComponent } from './pages/home/home.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -17,7 +18,7 @@ import { FormsModule } from '@angular/forms';
     RouterModule,
     FormsModule,
     NavItemComponent,
-    GoogleMapsModule,
+    HomeComponent,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,0 +1,86 @@
+<div class="ml-6 mr-6 flex flex-col sm:ml-[220px]">
+  <div class="mb-2 mt-4 flex justify-center">
+    <input
+      type="text"
+      placeholder="搜尋地址關鍵字"
+      class="h-10 rounded-md border-gray-400 placeholder:italic"
+    />
+    <button
+      type="button"
+      class="ml-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
+    >
+      搜尋
+    </button>
+  </div>
+  <i class="font-bold"
+    >*資料擷取時間:2023-09-28 16:04:21 (可能與真實資料有出入僅供參考)</i
+  >
+  <div
+    class="h-[500px] max-h-full w-full rounded-lg border-2 border-solid border-gray-200 p-4 dark:border-gray-700 sm:h-[700px]"
+  >
+    <google-map [options]="options" height="100%" width="100%" #map>
+      <map-marker
+        [position]="selfMarkerPositions"
+        [options]="selfMarkerOptions"
+      ></map-marker>
+
+      <map-marker-clusterer [imagePath]="markerClustererImagePath">
+        <ng-container *ngIf="showAllStation; else favoriteStationTemplate">
+          <map-marker
+            *ngFor="let item of allStation"
+            [position]="item.location"
+            [options]="markerOptions"
+            #marker="mapMarker"
+            (mapClick)="openInfoWindow(marker, item)"
+          ></map-marker>
+        </ng-container>
+
+        <ng-template #favoriteStationTemplate>
+          <map-marker
+            *ngFor="let item of favoriteStation"
+            [position]="item.location"
+            [options]="favoriteMarkerOption"
+            #marker="mapMarker"
+            (mapClick)="openInfoWindow(marker, item)"
+          ></map-marker>
+        </ng-template>
+      </map-marker-clusterer>
+
+      <map-info-window>
+        <div class="border-b-1 mb-2 flex border-solid border-[#9b9b9b] p-2">
+          <h2 class="mr-auto">{{ currentInfoWindow.name }}</h2>
+          <button
+            (click)="addToFavorite(currentInfoWindow.id)"
+            class="border-1 rounded-md border-solid border-slate-400 p-2 hover:cursor-pointer"
+          >
+            <span class="mr-2">加入收藏</span>
+            <i
+              class="fa-solid fa-heart text-red-600 hover:cursor-pointer"
+              *ngIf="currentInfoWindow.isFavorite"
+            ></i>
+            <i
+              class="fa-regular fa-heart text-red-600 hover:cursor-pointer"
+              *ngIf="!currentInfoWindow.isFavorite"
+            ></i>
+          </button>
+        </div>
+        <ul>
+          <li>【總車位數量】:{{ currentInfoWindow.totalcar }}</li>
+          <li>【充電車位數量】:{{ currentInfoWindow.ChargingStation }}</li>
+          <li>
+            <span>【收費資訊】:</span>
+            <p>{{ currentInfoWindow.payex }}</p>
+          </li>
+        </ul>
+      </map-info-window>
+    </google-map>
+  </div>
+
+  <a
+    href="https://pma.gov.taipei/Default.aspx"
+    target="_blank"
+    class="mt-1 self-end"
+  >
+    資訊來源:台北市政府停車資訊
+  </a>
+</div>
