@@ -4,6 +4,7 @@
   >
     Parking 台北市停車場資訊
   </h1>
+
   <div class="ml-6 mr-6 flex flex-col sm:ml-[220px]">
     <div class="mb-2 mt-4 flex justify-center">
       <input
@@ -22,18 +23,16 @@
       >*資料擷取時間:2023-09-28 16:04:21 (可能與真實資料有出入僅供參考)</i
     >
     <div
-      class="h-[500px] w-full rounded-lg border-2 border-solid border-gray-200 p-4 dark:border-gray-700"
+      class="h-[500px] max-h-full w-full rounded-lg border-2 border-solid border-gray-200 p-4 dark:border-gray-700 sm:h-[700px]"
     >
       <google-map [options]="options" height="100%" width="100%" #map>
-        <!-- 目前位置 -->
         <map-marker
           [position]="selfMarkerPositions"
           [options]="selfMarkerOptions"
         ></map-marker>
-        <!-- cluster marker 停車位置-->
+
         <map-marker-clusterer [imagePath]="markerClustererImagePath">
-          <!-- show all station -->
-          <ng-container *ngIf="showAllStation">
+          <ng-container *ngIf="showAllStation; else favoriteStationTemplate">
             <map-marker
               *ngFor="let item of allStation"
               [position]="item.location"
@@ -42,8 +41,8 @@
               (mapClick)="openInfoWindow(marker, item)"
             ></map-marker>
           </ng-container>
-          <!-- show favorite station -->
-          <ng-container *ngIf="!showAllStation">
+
+          <ng-template #favoriteStationTemplate>
             <map-marker
               *ngFor="let item of favoriteStation"
               [position]="item.location"
@@ -51,9 +50,9 @@
               #marker="mapMarker"
               (mapClick)="openInfoWindow(marker, item)"
             ></map-marker>
-          </ng-container>
+          </ng-template>
         </map-marker-clusterer>
-        <!-- 詳細資訊info window -->
+
         <map-info-window>
           <div class="border-b-1 mb-2 flex border-solid border-[#9b9b9b] p-2">
             <h2 class="mr-auto">{{ currentInfoWindow.name }}</h2>
@@ -83,37 +82,26 @@
         </map-info-window>
       </google-map>
     </div>
+
     <a
       href="https://pma.gov.taipei/Default.aspx"
       target="_blank"
       class="mt-1 self-end"
-      >資訊來源:台北市政府停車資訊</a
     >
+      資訊來源:台北市政府停車資訊
+    </a>
   </div>
+
   <nav
     class="relative mt-auto flex bg-gray-500 sm:absolute sm:h-screen sm:w-52 sm:flex-col"
   >
     <app-nav-item
-      class="w-full sm:mb-2"
-      [itemName]="'地圖'"
-      [iconClass]="'fa-solid fa-lg fa-user fa-location-dot'"
-      (click)="showAll()"
-    ></app-nav-item>
-    <app-nav-item
-      class="w-full sm:mb-2"
-      [itemName]="'收藏'"
-      [iconClass]="'fa-regular fa-lg fa-bookmark'"
-      (click)="showFavorite()"
-    ></app-nav-item>
-    <app-nav-item
-      class="w-full sm:mb-2"
-      [itemName]="'設定'"
-      [iconClass]="'fa-solid fa-lg fa-user fa-gear'"
-    ></app-nav-item>
-    <app-nav-item
       class="w-full"
-      [itemName]="'關於我'"
-      [iconClass]="'fa-regular fa-lg fa-user fa-user'"
+      *ngFor="let item of navItemList"
+      [itemName]="item.name"
+      [iconClass]="item.icon"
+      (click)="clickNav(item.id)"
+      [ngClass]="{ 'bg-slate-300 text-gray-600': currentItem == item.id }"
     ></app-nav-item>
     <p class="hidden text-sm text-white sm:mb-4 sm:mt-auto sm:block sm:p-4">
       © 2024. All rights reserved.

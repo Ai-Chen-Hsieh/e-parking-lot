@@ -78,12 +78,35 @@ export class AppComponent implements OnInit {
   favoriteList: string[] = [];
   service = inject(Service);
   showAllStation = true;
+  showFavorite = false;
+  currentItem = 0;
+
+  navItemList = [
+    {
+      id: 0,
+      name: '地圖',
+      icon: 'fa-solid fa-lg fa-user fa-location-dot',
+    },
+    {
+      id: 1,
+      name: '收藏',
+      icon: 'fa-regular fa-lg fa-bookmark',
+    },
+    {
+      id: 2,
+      name: '設定',
+      icon: 'fa-solid fa-lg fa-user fa-gear',
+    },
+    {
+      id: 3,
+      name: '關於我',
+      icon: 'fa-regular fa-lg fa-user fa-user',
+    },
+  ];
 
   ngOnInit(): void {
     initFlowbite();
-    this.favoriteList = JSON.parse(localStorage.getItem('favorite') || '[]')
-      ? JSON.parse(localStorage.getItem('favorite') || '[]')
-      : [];
+    this.setFavoriteStation();
     this.getUserPosition();
     this.getStation();
   }
@@ -104,21 +127,14 @@ export class AppComponent implements OnInit {
     }
   }
 
-  getStation() {
+  getStation(): void {
     this.service.getAllStation().subscribe((res) => {
-      let allStationPosition = res.data.park
+      this.allStation = res.data.park
         .filter(
-          (i: {
-            EntranceCoord: { EntrancecoordInfo: { Xcod: any; Ycod: any }[] };
-          }) => i.EntranceCoord.EntrancecoordInfo !== undefined,
+          (i: ParkingLot) => i.EntranceCoord.EntrancecoordInfo !== undefined,
         )
         .map((item: ParkingLot): ParkingStationInfo => {
-          let isFavorite = this.favoriteList.find(
-            (i) => item.id === i.toString(),
-          )
-            ? true
-            : false;
-
+          const isFavorite = this.favoriteList.includes(item.id.toString());
           return {
             id: item.id,
             name: item.name,
@@ -136,39 +152,58 @@ export class AppComponent implements OnInit {
             isFavorite: isFavorite,
           };
         });
-      this.allStation = [...allStationPosition];
+      this.setFavoriteStation();
     });
   }
 
-  openInfoWindow(marker: MapMarker, item: any) {
-    this.currentInfoWindow = {
-      ...item,
-    };
+  openInfoWindow(marker: MapMarker, item: ParkingStationInfo): void {
+    this.currentInfoWindow = { ...item };
     this.infoWindow!.open(marker);
   }
 
-  addToFavorite(id: string) {
+  addToFavorite(id: string): void {
     const isFavorite = this.favoriteList.includes(id);
-
     if (isFavorite) {
       this.favoriteList = this.favoriteList.filter((favId) => favId !== id);
     } else {
       this.favoriteList.push(id);
     }
-
     localStorage.setItem('favorite', JSON.stringify(this.favoriteList));
+    this.updateStationFavorites();
+  }
+
+  setFavoriteStation(): void {
+    this.favoriteList = JSON.parse(localStorage.getItem('favorite') || '[]');
+    this.favoriteStation = this.allStation.filter((station) =>
+      this.favoriteList.includes(station.id),
+    );
+  }
+
+  updateStationFavorites(): void {
     this.allStation = this.allStation.map((station) => ({
       ...station,
-      isFavorite: station.id === id ? !station.isFavorite : station.isFavorite,
+      isFavorite: this.favoriteList.includes(station.id),
     }));
-    this.favoriteStation = this.allStation.filter((i) => i.isFavorite);
+    this.favoriteStation = this.allStation.filter(
+      (station) => station.isFavorite,
+    );
   }
 
-  showFavorite() {
-    this.showAllStation = false;
-  }
-
-  showAll() {
-    this.showAllStation = true;
+  clickNav(id: number): void {
+    this.currentItem = id;
+    switch (id) {
+      case 0:
+        this.showAllStation = true;
+        this.showFavorite = false;
+        break;
+      case 1:
+        this.showFavorite = true;
+        this.showAllStation = false;
+        break;
+      default:
+        this.showAllStation = true;
+        this.showFavorite = false;
+        break;
+    }
   }
 }
