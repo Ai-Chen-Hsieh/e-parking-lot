@@ -103,17 +103,27 @@ export class HomeComponent {
 
   getUserPosition() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
-        this.options = {
-          ...this.options,
-          center: pos,
-        };
-        this.selfMarkerPositions = pos;
-      });
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          this.options = {
+            ...this.options,
+            center: pos,
+          };
+          this.selfMarkerPositions = pos;
+        },
+        (error) => {
+          console.error(error.message);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0,
+        },
+      );
     }
   }
 

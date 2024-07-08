@@ -16,8 +16,8 @@
       *ngFor="let item of navItemList"
       [itemName]="item.name"
       [iconClass]="item.icon"
+      [selectedItem]="currentItem === item.id"
       (click)="clickNav(item.id)"
-      [ngClass]="{ 'bg-slate-300 text-gray-600': currentItem == item.id }"
     ></app-nav-item>
     <p class="hidden text-sm text-white sm:mb-4 sm:mt-auto sm:block sm:p-4">
       © 2024. All rights reserved.

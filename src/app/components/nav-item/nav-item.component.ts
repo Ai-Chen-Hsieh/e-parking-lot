@@ -1,4 +1,10 @@
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,4 +17,5 @@ import { CommonModule } from '@angular/common';
 export class NavItemComponent {
   @Input() itemName: string | undefined;
   @Input() iconClass: string | undefined;
+  @Input() selectedItem: boolean | undefined;
 }
