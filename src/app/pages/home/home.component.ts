@@ -1,5 +1,5 @@
 import { SharedObservable } from './../../sharedObservable/sharedObservable';
-import { Component, Input, ViewChild, inject } from '@angular/core';
+import { Component, Input, ViewChild, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   GoogleMapsModule,
@@ -9,6 +9,7 @@ import {
 import { initFlowbite } from 'flowbite';
 import { ParkingStationInfo, ParkingLot } from 'src/app/model/model';
 import { Service } from 'src/app/service/service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-home',
@@ -86,19 +87,24 @@ export class HomeComponent {
   showFavoriteStation = false;
   service = inject(Service);
   SharedObservable = inject(SharedObservable);
+  DestroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     initFlowbite();
     this.setFavoriteStation();
     this.getUserPosition();
     this.getStation();
-    this.SharedObservable.showAllStation$.subscribe((res) => {
-      this.showAllStation = res;
-    });
+    this.SharedObservable.showAllStation$
+      .pipe(takeUntilDestroyed(this.DestroyRef))
+      .subscribe((res) => {
+        this.showAllStation = res;
+      });
 
-    this.SharedObservable.showFavoriteStation$.subscribe((res) => {
-      this.showFavoriteStation = res;
-    });
+    this.SharedObservable.showFavoriteStation$
+      .pipe(takeUntilDestroyed(this.DestroyRef))
+      .subscribe((res) => {
+        this.showFavoriteStation = res;
+      });
   }
 
   getUserPosition() {
@@ -128,32 +134,35 @@ export class HomeComponent {
   }
 
   getStation(): void {
-    this.service.getAllStation().subscribe((res) => {
-      this.allStation = res.data.park
-        .filter(
-          (i: ParkingLot) => i.EntranceCoord.EntrancecoordInfo !== undefined,
-        )
-        .map((item: ParkingLot): ParkingStationInfo => {
-          const isFavorite = this.favoriteList.includes(item.id.toString());
-          return {
-            id: item.id,
-            name: item.name,
-            area: item.area,
-            address: item.address,
-            payex: item.payex,
-            serviceTime: item.serviceTime,
-            totalcar: item.totalcar,
-            totalmotor: item.totalmotor,
-            ChargingStation: item.ChargingStation,
-            location: {
-              lat: Number(item.EntranceCoord.EntrancecoordInfo[0]?.Xcod),
-              lng: Number(item.EntranceCoord.EntrancecoordInfo[0]?.Ycod),
-            },
-            isFavorite: isFavorite,
-          };
-        });
-      this.setFavoriteStation();
-    });
+    this.service
+      .getAllStation()
+      .pipe(takeUntilDestroyed(this.DestroyRef))
+      .subscribe((res) => {
+        this.allStation = res.data.park
+          .filter(
+            (i: ParkingLot) => i.EntranceCoord.EntrancecoordInfo !== undefined,
+          )
+          .map((item: ParkingLot): ParkingStationInfo => {
+            const isFavorite = this.favoriteList.includes(item.id.toString());
+            return {
+              id: item.id,
+              name: item.name,
+              area: item.area,
+              address: item.address,
+              payex: item.payex,
+              serviceTime: item.serviceTime,
+              totalcar: item.totalcar,
+              totalmotor: item.totalmotor,
+              ChargingStation: item.ChargingStation,
+              location: {
+                lat: Number(item.EntranceCoord.EntrancecoordInfo[0]?.Xcod),
+                lng: Number(item.EntranceCoord.EntrancecoordInfo[0]?.Ycod),
+              },
+              isFavorite: isFavorite,
+            };
+          });
+        this.setFavoriteStation();
+      });
   }
 
   openInfoWindow(marker: MapMarker, item: ParkingStationInfo): void {
